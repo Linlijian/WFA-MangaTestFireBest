@@ -11,6 +11,7 @@ using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
 using FireSharp;
+using System.Net;
 
 namespace WFA_MangaTestFireBest
 {
@@ -44,7 +45,7 @@ namespace WFA_MangaTestFireBest
         {
             var todo = new Todo
             {
-                name = "Execute 2!",
+                name = "2!",
                 priority = 2
             };
 
@@ -86,6 +87,22 @@ namespace WFA_MangaTestFireBest
         {
             FirebaseResponse response = await client.DeleteAsync("todos"); //Deletes todos collection
             Console.WriteLine(response.StatusCode);
+        }
+
+        private async void button7_Click(object sender, EventArgs e)
+        {
+            //image
+            FirebaseResponse response = await client.GetAsync("image/C001");
+            ImageModel img = response.ResultAs<ImageModel>(); //The response will contain the data being retreived
+            var request = WebRequest.Create(img.url);
+
+            using (var responseA = request.GetResponse())
+            using (var stream = responseA.GetResponseStream())
+            {
+                //pictureBox1.Image = Bitmap.FromStream(stream);
+                //pictureBox1.LoadAsync(img.url);
+                pictureBox1.Load(img.url);
+            }
         }
     }
 }
